@@ -1,4 +1,4 @@
 # INFMDI721 Baptiste Pannier 
-Exercices toujours en python3
+Exercices toujours en *python3*
 
 
