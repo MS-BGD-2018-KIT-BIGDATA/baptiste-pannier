@@ -1,0 +1,25 @@
+#!/usr/local/bin/python3
+import requests
+from bs4 import BeautifulSoup
+
+
+part1 = "https://www.cdiscount.com/search/10/"
+part2 = ".html#_his_"
+
+
+for elm in ["acer", "dell"]:
+    url = part1 + elm + part2
+
+    page = requests.get(url)
+    soup = BeautifulSoup(page.text, 'html.parser')
+
+    new_price = soup.find_all(class_="price")
+    old_price = soup.find_all(class_="prdtPrSt")
+    promo = soup.find_all(class_="ecoBlk")
+    for i in promo:
+        print(elm + ":")
+        print(i)
+    # Reste à comparer promo et old_price...
+    # pour obtenir un pourcentage moyen
+    # faire attention aux reduction en euros et en %
+    # puis comparer acer et dell
