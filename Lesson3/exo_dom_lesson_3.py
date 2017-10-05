@@ -44,7 +44,7 @@ def main(argv):
     # Now let's get the mean number of stars
     # of all repositories for all name
     result = dict()
-    for i in name[0:20]:
+    for i in name:
         r = requests.get('https://api.github.com/users/'
                          + i + '/repos?per_page=1000',
                          auth=(user, passwd))
@@ -52,6 +52,8 @@ def main(argv):
         l = list(filter(None.__ne__, map(lambda x: get_stars(x), d)))
         result[i] = mean(l)
 
+    result = [(k, result[k])
+              for k in sorted(result, key=result.get, reverse=True)]
     pp = pprint.PrettyPrinter(indent=2)
     pp.pprint(result)
 
