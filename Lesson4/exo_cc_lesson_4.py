@@ -13,21 +13,35 @@ class Medic:
     restric = None
 
 
-url = "https://www.open-medicaments.fr/api/v1/medicaments?query=ibuprof%C3%A8ne"
+def get_medic_properties(medic_id):
 
-r = simplejson.load(urllib.request.urlopen(url))
-id_med = [i['codeCIS'] for i in r]
+    url = "https://www.open-medicaments.fr/api/v1/medicaments/" + medic_id
 
-url2 = "https://www.open-medicaments.fr/api/v1/medicaments/"
-
-for i in id_med:
-    url = url2 + i
     r = simplejson.load(urllib.request.urlopen(url))
-    titulaire = r['titulaires']
-    date = r['dateAMM']
+    medic = Medic()
+    medic.titulaire = r['titulaires']
+    medic.date = r['dateAMM']
     if 'prix' in r:
         price = r['prix']
     else:
         price = None
     restric = r['indicationsTherapeutiques']
-    print(titulaire, date, price)
+    r = re.search("[0-9]+ kg", restric)
+    if r is not None:
+        restric = r.group(0)[0:-3]
+    else:
+        restric = None
+
+    return medic
+
+
+url = "https://www.open-medicaments.fr/api/v1/medicaments?query=ibuprof%C3%A8ne"
+r = simplejson.load(urllib.request.urlopen(url))
+id_med = [i['codeCIS'] for i in r]
+
+medics = list(map(lambda x: get_medic_properties(x), id_med))
+
+print(medics[0].titulaire)
+print(medics[0].price)
+print(medics[0].date)
+print(medics[0].restric)
