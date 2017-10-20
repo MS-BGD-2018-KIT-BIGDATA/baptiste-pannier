@@ -22,15 +22,15 @@ def get_medic_properties(medic_id):
     medic.titulaire = r['titulaires']
     medic.date = r['dateAMM']
     if 'prix' in r:
-        price = r['prix']
+        medic.price = r['prix']
     else:
-        price = None
+        medic.price = None
     restric = r['indicationsTherapeutiques']
     r = re.search("[0-9]+ kg", restric)
     if r is not None:
-        restric = r.group(0)[0:-3]
+        medic.restric = r.group(0)[0:-3]
     else:
-        restric = None
+        medic.restric = None
 
     return medic
 
